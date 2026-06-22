@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-zeib-black: #070707;
+  --color-zeib-ink: #111111;
+  --color-zeib-gold: #c9a24a;
+  --color-zeib-soft-gold: #f2d88f;
+  --color-zeib-cream: #f8f5ef;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #070707;
+  color: #f8f5ef;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.focus-ring {
+  @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zeib-gold;
+}
