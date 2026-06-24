@@ -2,12 +2,13 @@
 
 import { ProductCard } from "@/components/commerce/product-card";
 import { useCart } from "@/components/providers/cart-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Container, Section } from "@/components/ui/section";
-import { products } from "@/data/demo-products";
 
 export default function WishlistPage() {
   const { wishlist } = useCart();
+  const { products } = useProducts();
   const savedProducts = products.filter((product) => wishlist.includes(product.id));
 
   return (

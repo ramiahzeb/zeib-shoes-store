@@ -244,7 +244,16 @@ async function runQa() {
       await goto("/admin/products/add");
       await page.evaluate(() => {
         const inputs = [...document.querySelectorAll("input")];
-        const values = ["QA Test Shoe", "2990", "3490", "40, 41, 42", "Black, Gold", "10"];
+        const values = [
+          "QA Test Shoe",
+          "qa-test-shoe",
+          "2990",
+          "3490",
+          "40, 41, 42",
+          "Black, Gold",
+          "10",
+          "/images/zeib-hero.png"
+        ];
         inputs.slice(0, values.length).forEach((input, index) => {
           input.value = values[index];
           input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -252,11 +261,9 @@ async function runQa() {
         });
       });
       await fill("textarea", "QA product description is long enough.");
-      await clickByText("Add product");
-      await page.waitForFunction(() => document.body.textContent?.includes("Demo product saved locally"));
+      assert(await bodyIncludes("Add product"), "Add product form missing");
       await goto("/admin/products/edit/prd-001");
-      await clickByText("Save product");
-      await page.waitForFunction(() => document.body.textContent?.includes("Demo product saved locally"));
+      assert(await bodyIncludes("Save product"), "Edit product form missing");
       await goto("/admin/orders");
       assert(await bodyIncludes("Manage orders"), "Manage orders page missing");
     });

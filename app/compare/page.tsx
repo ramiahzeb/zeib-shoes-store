@@ -3,14 +3,15 @@
 import { Trash2 } from "lucide-react";
 import { ProductCard } from "@/components/commerce/product-card";
 import { useCart } from "@/components/providers/cart-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { Button, LinkButton } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Container, Section } from "@/components/ui/section";
 import { formatPrice } from "@/lib/format";
-import { getProductById } from "@/lib/store";
 
 export default function ComparePage() {
   const { compare, clearCompare } = useCart();
+  const { getProductById } = useProducts();
   const products = compare.map((id) => getProductById(id)).filter((product) => Boolean(product));
 
   return (

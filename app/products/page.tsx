@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { ProductFilters } from "@/components/commerce/product-filters";
+import { StorefrontProducts } from "@/components/commerce/storefront-products";
 import { Container, Section } from "@/components/ui/section";
-import { getProducts } from "@/lib/store";
 
 export const metadata: Metadata = {
   title: "Shop Footwear",
@@ -19,7 +18,7 @@ export default function ProductsPage() {
             Search, filter by category and price, then sort by price, rating, or newest arrivals.
           </p>
         </div>
-        <ProductFilters products={getProducts()} />
+        <StorefrontProducts />
       </Container>
     </Section>
   );

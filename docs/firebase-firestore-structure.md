@@ -14,6 +14,7 @@ Use Firebase Authentication for user identity and Firestore for storefront data.
   - `updatedAt`
 
 - `products/{productId}`
+  - `id`
   - `name`
   - `slug`
   - `category`
@@ -24,6 +25,10 @@ Use Firebase Authentication for user identity and Firestore for storefront data.
   - `colors`
   - `stock`
   - `images`
+  - `rating`
+  - `reviewCount`
+  - `features`
+  - `isNew`
   - `createdAt`
   - `updatedAt`
 

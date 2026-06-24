@@ -1,10 +1,14 @@
+"use client";
+
 import { Package, ShoppingCart, Star, Users } from "lucide-react";
 import { AdminGuard } from "@/components/commerce/admin-guard";
+import { useProducts } from "@/components/providers/product-provider";
 import { LinkButton } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
-import { demoOrders, products, reviews } from "@/data/demo-products";
+import { demoOrders, reviews } from "@/data/demo-products";
 
 export default function AdminDashboardPage() {
+  const { products } = useProducts();
   const stats = [
     { label: "Products", value: products.length, icon: Package },
     { label: "Orders", value: demoOrders.length, icon: ShoppingCart },

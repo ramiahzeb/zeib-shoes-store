@@ -4,15 +4,16 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useCart } from "@/components/providers/cart-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Container, Section } from "@/components/ui/section";
 import { formatPrice } from "@/lib/format";
-import { getProductById } from "@/lib/store";
 
 export default function OrdersPage() {
   const router = useRouter();
   const { customer, loading } = useAuth();
   const { orders } = useCart();
+  const { getProductById } = useProducts();
 
   useEffect(() => {
     if (!loading && !customer) router.push("/login");

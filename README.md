@@ -1,13 +1,13 @@
 # ZEIB SHOES
 
-Production-ready Next.js e-commerce app for **ZEIB SHOES** with local demo data first, Firebase-ready architecture, WhatsApp checkout, and Vercel deployment support.
+Production-ready Next.js e-commerce app for **ZEIB SHOES** with Firebase Authentication, Firestore products and customer data, WhatsApp checkout, and Vercel deployment support.
 
 ## Stack
 
 - Next.js 16.2.9 App Router
 - React 19.2.7
 - Tailwind CSS 4
-- Firebase Authentication and Firestore-ready customers, products, reviews, wishlist, cart, and orders
+- Firebase Authentication and Firestore customers, products, wishlist, cart, and orders
 - Resend/SendGrid-ready server email route
 - Vercel-ready environment configuration
 
@@ -49,11 +49,13 @@ Secrets must stay in server env vars only. Do not expose email API keys in front
 5. Use these collections: `customers`, `products`, `reviews`, `wishlist`, `carts`, and `orders`.
 6. Orders store `order_items` as a nested array for now.
 7. Add admin emails to `NEXT_PUBLIC_ADMIN_EMAILS`.
-8. Keep product images local in `public/images` until Firebase Storage or Cloudinary is connected.
+8. Admin product add, edit, and delete operations write to `products`.
+9. Storefront pages load Firestore products first and use bundled demo products only when the collection is empty.
+10. Keep product images local in `public/images` until Firebase Storage or Cloudinary is connected.
 
 See `docs/firebase-firestore-structure.md` for the prepared collection shape.
 
-The app currently runs without Firebase keys using local demo products, auth, cart, wishlist, orders, and reviews.
+The app still runs without Firebase keys using local demo products, auth, cart, wishlist, orders, and reviews. Product administration requires Firebase configuration to persist changes.
 
 Visit `http://localhost:3000/debug-firebase` to verify Firebase public config is loaded in the browser.
 

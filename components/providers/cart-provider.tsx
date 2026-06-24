@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { saveFirebaseCart, saveFirebaseOrder, saveFirebaseWishlist } from "@/lib/firebase/customer-data";
 import {
   getCartKey,
@@ -13,7 +14,6 @@ import {
   readStoredValue,
   writeStoredValue
 } from "@/lib/demo-storage";
-import { getProductById } from "@/lib/store";
 import type { CartItem, Customer, Order } from "@/lib/types";
 
 type CheckoutCustomer = Pick<Customer, "name" | "email" | "phone" | "address">;
@@ -64,6 +64,7 @@ function loadUserData(customer: Customer | null) {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const { customer, lastAuthAction } = useAuth();
+  const { getProductById } = useProducts();
   const storageUser = makeStorageUser(customer);
   const [items, setItems] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>([]);

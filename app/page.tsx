@@ -1,14 +1,11 @@
 import Image from "next/image";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { ProductCard } from "@/components/commerce/product-card";
+import { FeaturedProducts } from "@/components/commerce/featured-products";
 import { TrustBadges } from "@/components/commerce/trust-badges";
 import { LinkButton } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
-import { products } from "@/data/demo-products";
 
 export default function HomePage() {
-  const featured = products.slice(0, 3);
-
   return (
     <>
       <section className="relative min-h-[78vh] overflow-hidden">
@@ -48,11 +45,7 @@ export default function HomePage() {
               View all
             </LinkButton>
           </div>
-          <div className="grid gap-5 md:grid-cols-3 [&_article]:border-black/10 [&_article]:bg-black/[0.03] [&_article_a]:text-black [&_article_p]:text-black/65 [&_button]:text-black">
-            {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <FeaturedProducts />
         </Container>
       </Section>
 

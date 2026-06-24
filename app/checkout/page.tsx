@@ -4,15 +4,16 @@ import { MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useCart } from "@/components/providers/cart-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { Button, LinkButton } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Container, Section } from "@/components/ui/section";
 import { formatPrice } from "@/lib/format";
-import { getProductById } from "@/lib/store";
 
 export default function CheckoutPage() {
   const { customer } = useAuth();
   const { items, subtotal, buildWhatsAppUrl, saveOrder } = useCart();
+  const { getProductById } = useProducts();
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);

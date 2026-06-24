@@ -4,11 +4,12 @@ import Link from "next/link";
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { useCart } from "@/components/providers/cart-provider";
 import { Button, LinkButton } from "@/components/ui/button";
+import { useProducts } from "@/components/providers/product-provider";
 import { formatPrice } from "@/lib/format";
-import { getProductById } from "@/lib/store";
 
 export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, subtotal, updateQuantity, removeItem } = useCart();
+  const { getProductById } = useProducts();
 
   return (
     <div

@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/components/providers/cart-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { Button, LinkButton } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Container, Section } from "@/components/ui/section";
 import { formatPrice } from "@/lib/format";
-import { getProductById } from "@/lib/store";
 
 export default function CartPage() {
   const { items, subtotal, updateQuantity, removeItem } = useCart();
+  const { getProductById } = useProducts();
 
   return (
     <Section>

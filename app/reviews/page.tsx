@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useProducts } from "@/components/providers/product-provider";
 import { Container, Section } from "@/components/ui/section";
 import { reviews } from "@/data/demo-products";
-import { getProductById } from "@/lib/store";
 
 export default function ReviewsPage() {
   const { customer } = useAuth();
+  const { getProductById } = useProducts();
 
   return (
     <Section>

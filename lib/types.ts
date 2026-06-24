@@ -17,6 +17,7 @@ export type Product = {
   isNew: boolean;
   images: string[];
   createdAt: string;
+  updatedAt?: string;
 };
 
 export type CartItem = {

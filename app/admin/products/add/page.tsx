@@ -8,7 +8,7 @@ export default function AddProductPage() {
       <Container className="max-w-4xl">
         <AdminGuard>
           <h1 className="font-serif text-4xl font-bold">Add product</h1>
-          <p className="mt-3 text-white/60">Create product details, pricing, sizes, colors, stock, and image upload metadata.</p>
+          <p className="mt-3 text-white/60">Create a product in the Firebase Firestore products collection.</p>
           <div className="mt-8">
             <ProductAdminForm />
           </div>
