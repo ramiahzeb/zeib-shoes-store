@@ -243,7 +243,7 @@ async function runQa() {
       assert(await bodyIncludes("Dashboard"), "Admin dashboard missing");
       await goto("/admin/products/add");
       await page.evaluate(() => {
-        const inputs = [...document.querySelectorAll("input")];
+        const inputs = [...document.querySelectorAll('input:not([type="file"])')];
         const values = [
           "QA Test Shoe",
           "qa-test-shoe",

@@ -1,10 +1,13 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ImagePlus, Trash2, Upload } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
 import { categories } from "@/data/demo-products";
 import { useProducts } from "@/components/providers/product-provider";
 import { Button } from "@/components/ui/button";
+import { uploadFirebaseProductImage } from "@/lib/firebase/product-images";
 import {
   createFirebaseProduct,
   updateFirebaseProduct,
@@ -18,6 +21,37 @@ export function ProductAdminForm({ product }: { product?: Product }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imageUrls, setImageUrls] = useState(product?.images.join(", ") ?? "");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewImages = useMemo(() => splitValues(imageUrls), [imageUrls]);
+
+  async function uploadImage() {
+    if (!selectedFile) {
+      setError("Choose an image before uploading.");
+      return;
+    }
+
+    setUploading(true);
+    setStatus("");
+    setError("");
+    try {
+      const downloadUrl = await uploadFirebaseProductImage(selectedFile);
+      setImageUrls((current) => joinUniqueValues([...splitValues(current), downloadUrl]));
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      setStatus("Image uploaded to Firebase Storage. Save the product to keep this URL.");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not upload the product image.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function removeImage(url: string) {
+    setImageUrls((current) => joinUniqueValues(splitValues(current).filter((item) => item !== url)));
+  }
 
   return (
     <form
@@ -40,7 +74,7 @@ export function ProductAdminForm({ product }: { product?: Product }) {
           colors: splitValues(form.get("colors")),
           stock: Number(form.get("stock") || 0),
           description: String(form.get("description") || "").trim(),
-          images: splitValues(form.get("images")),
+          images: splitValues(imageUrls),
           rating: product?.rating ?? 0,
           reviewCount: product?.reviewCount ?? 0,
           features: product?.features ?? [],
@@ -152,19 +186,68 @@ export function ProductAdminForm({ product }: { product?: Product }) {
             required
           />
         </label>
+        <div className="sm:col-span-2">
+          <span className="text-sm font-medium">Upload product image</span>
+          <div className="mt-2 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
+            <label>
+              <span className="sr-only">Choose product image</span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={(event) => setSelectedFile(event.target.files?.[0] ?? null)}
+                className="focus-ring block w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-zeib-gold file:px-3 file:py-2 file:font-semibold file:text-black"
+              />
+            </label>
+            <Button type="button" onClick={() => void uploadImage()} disabled={!selectedFile || uploading || saving}>
+              <Upload className="h-4 w-4" /> {uploading ? "Uploading..." : "Upload Image"}
+            </Button>
+          </div>
+          <p className="mt-2 text-xs text-white/45">
+            JPG, PNG, WebP, or another image format up to 8 MB. Files are stored in Firebase Storage under product-images.
+          </p>
+        </div>
         <label className="sm:col-span-2">
-          <span className="text-sm font-medium">Image URLs</span>
+          <span className="text-sm font-medium">Image URLs (optional)</span>
           <input
             name="images"
-            defaultValue={product?.images.join(", ") ?? "/images/zeib-hero.png"}
+            value={imageUrls}
+            onChange={(event) => setImageUrls(event.target.value)}
             placeholder="/images/product.jpg, https://..."
             className="focus-ring mt-2 h-11 w-full rounded-md border border-white/10 bg-black/50 px-3"
-            required
           />
           <span className="mt-2 block text-xs text-white/45">
-            Use comma-separated local or hosted image URLs. TODO: Add Firebase Storage or Cloudinary upload.
+            Uploaded URLs are added here automatically. You can also enter comma-separated local or hosted image URLs.
           </span>
         </label>
+        <div className="sm:col-span-2">
+          <div className="flex items-center gap-2">
+            <ImagePlus className="h-4 w-4 text-zeib-gold" />
+            <span className="text-sm font-medium">Image preview</span>
+          </div>
+          {previewImages.length ? (
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              {previewImages.map((url) => (
+                <div key={url} className="group relative aspect-square overflow-hidden rounded-md border border-white/10 bg-black/40">
+                  <img src={url} alt="Product preview" className="h-full w-full object-cover" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="absolute right-2 top-2 h-9 w-9 bg-black/75 p-0 text-red-200 hover:bg-black"
+                    onClick={() => removeImage(url)}
+                    aria-label="Remove image"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-3 rounded-md border border-dashed border-white/15 p-5 text-sm text-white/45">
+              Upload an image or enter an image URL to preview it here.
+            </p>
+          )}
+        </div>
         <label className="sm:col-span-2">
           <span className="text-sm font-medium">Description</span>
           <textarea
@@ -175,7 +258,7 @@ export function ProductAdminForm({ product }: { product?: Product }) {
           />
         </label>
       </div>
-      <Button className="mt-5" disabled={saving}>
+      <Button className="mt-5" disabled={saving || uploading}>
         {saving ? "Saving..." : product ? "Save product" : "Add product"}
       </Button>
       {status ? <p className="mt-3 text-sm text-green-300">{status}</p> : null}
@@ -189,4 +272,8 @@ function splitValues(value: FormDataEntryValue | null) {
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function joinUniqueValues(values: string[]) {
+  return Array.from(new Set(values)).join(", ");
 }

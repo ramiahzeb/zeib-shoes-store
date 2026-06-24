@@ -51,7 +51,7 @@ Secrets must stay in server env vars only. Do not expose email API keys in front
 7. Add admin emails to `NEXT_PUBLIC_ADMIN_EMAILS`.
 8. Admin product add, edit, and delete operations write to `products`.
 9. Storefront pages load Firestore products first and use bundled demo products only when the collection is empty.
-10. Keep product images local in `public/images` until Firebase Storage or Cloudinary is connected.
+10. Enable Firebase Storage. Admin uploads are stored in `product-images` and their download URLs are saved with Firestore products.
 
 See `docs/firebase-firestore-structure.md` for the prepared collection shape.
 
@@ -101,6 +101,6 @@ npm run dev
 ## Notes
 
 - GitHub push has not been configured or performed.
-- Product imagery is local in `public/images`.
+- Demo imagery remains in `public/images`; admin product images can be uploaded to Firebase Storage.
 - Sensitive work is prepared for server actions/API routes.
 - Demo mode is intentionally local-first so the storefront works before Firebase keys are added.

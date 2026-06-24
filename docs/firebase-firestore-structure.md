@@ -68,6 +68,10 @@ Use Firebase Authentication for user identity and Firestore for storefront data.
 
 ## Storage
 
-Product images remain local demo assets in `public/images` for now.
+Admin product images are uploaded to Firebase Storage under:
 
-TODO: Add Firebase Storage or Cloudinary upload support for admin product images.
+```text
+product-images/{generated-id}-{safe-file-name}
+```
+
+The resulting download URLs are stored in the Firestore product `images` array.
