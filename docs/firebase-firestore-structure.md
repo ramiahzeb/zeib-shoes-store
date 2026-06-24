@@ -66,12 +66,13 @@ Use Firebase Authentication for user identity and Firestore for storefront data.
   - `createdAt`
   - `updatedAt`
 
-## Storage
+## Product Images
 
-Admin product images are uploaded to Firebase Storage under:
+Product documents store image references in the `images` array. Use either:
 
 ```text
-product-images/{generated-id}-{safe-file-name}
+/images/product.jpg
+https://example.com/product.jpg
 ```
 
-The resulting download URLs are stored in the Firestore product `images` array.
+Place local files in `public/images`, or use externally hosted image URLs. Firebase Storage is not required.

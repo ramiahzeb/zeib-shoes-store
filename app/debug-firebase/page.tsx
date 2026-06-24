@@ -51,7 +51,6 @@ export default function DebugFirebasePage() {
             <DebugRow label="API key prefix" value={config.apiKeyPrefix || "not loaded"} />
             <DebugRow label="Auth domain loaded" value={config.authDomain ? "yes" : "no"} />
             <DebugRow label="Project ID loaded" value={config.projectId ? "yes" : "no"} />
-            <DebugRow label="Storage bucket loaded" value={config.storageBucket ? "yes" : "no"} />
             <DebugRow label="App ID loaded" value={config.appId ? "yes" : "no"} />
             <DebugRow label="Admin emails loaded" value={adminEmails.length ? "yes" : "no"} />
             <DebugRow label="Firebase client" value={clientState.status} />

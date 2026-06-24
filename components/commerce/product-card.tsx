@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { GitCompare, Heart, Share2, Star } from "lucide-react";
 import { useState } from "react";
@@ -21,12 +21,11 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group overflow-hidden rounded-md border border-white/10 bg-white/[0.04]">
       <Link href={`/products/${product.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-white/5">
-        <Image
+        <img
           src={product.images[0]}
           alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition duration-500 group-hover:scale-105"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <div className="absolute left-3 top-3 flex gap-2">
           {product.isNew ? <span className="rounded bg-zeib-gold px-2 py-1 text-xs font-bold text-black">New</span> : null}

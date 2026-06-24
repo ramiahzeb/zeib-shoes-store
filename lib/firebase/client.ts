@@ -1,13 +1,11 @@
 import { getApp, getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
-import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 export type FirebaseClientConfig = {
   apiKey: string;
   authDomain: string;
   projectId: string;
-  storageBucket: string;
   messagingSenderId: string;
   appId: string;
   hasAnyConfig: boolean;
@@ -20,7 +18,6 @@ type FirebaseServices = {
   app: FirebaseApp;
   auth: Auth;
   db: Firestore;
-  storage: FirebaseStorage;
 };
 
 let firebaseServices: FirebaseServices | null | undefined;
@@ -33,14 +30,12 @@ export function getFirebaseClientConfig(): FirebaseClientConfig {
   const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY?.trim() ?? "";
   const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN?.trim() ?? "";
   const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID?.trim() ?? "";
-  const storageBucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim() ?? "";
   const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID?.trim() ?? "";
   const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.trim() ?? "";
   const entries = [
     ["NEXT_PUBLIC_FIREBASE_API_KEY", apiKey],
     ["NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN", authDomain],
     ["NEXT_PUBLIC_FIREBASE_PROJECT_ID", projectId],
-    ["NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET", storageBucket],
     ["NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID", messagingSenderId],
     ["NEXT_PUBLIC_FIREBASE_APP_ID", appId]
   ] as const;
@@ -50,7 +45,6 @@ export function getFirebaseClientConfig(): FirebaseClientConfig {
     apiKey,
     authDomain,
     projectId,
-    storageBucket,
     messagingSenderId,
     appId,
     hasAnyConfig: entries.some(([, value]) => Boolean(value)),
@@ -109,7 +103,6 @@ export function getFirebaseServices() {
           apiKey: config.apiKey,
           authDomain: config.authDomain,
           projectId: config.projectId,
-          storageBucket: config.storageBucket,
           messagingSenderId: config.messagingSenderId,
           appId: config.appId
         });
@@ -117,8 +110,7 @@ export function getFirebaseServices() {
   firebaseServices = {
     app,
     auth: getAuth(app),
-    db: getFirestore(app),
-    storage: getStorage(app)
+    db: getFirestore(app)
   };
   return firebaseServices;
 }
