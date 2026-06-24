@@ -44,7 +44,7 @@ export function AdminOrdersList() {
               </p>
             ))}
           </div>
-          <p className="mt-3 text-xs text-white/40">TODO: Load and update orders/order_items from Supabase with admin-only RLS policies.</p>
+          <p className="mt-3 text-xs text-white/40">TODO: Load and update orders/order_items from Firestore with admin-only security rules.</p>
         </article>
       ))}
     </div>

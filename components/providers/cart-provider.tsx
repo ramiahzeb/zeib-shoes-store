@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
+import { saveFirebaseCart, saveFirebaseOrder, saveFirebaseWishlist } from "@/lib/firebase/customer-data";
 import {
   getCartKey,
   getCompareKey,
@@ -31,7 +32,7 @@ type CartContextValue = {
   toggleCompare: (productId: string) => void;
   isCompared: (productId: string) => boolean;
   clearCompare: () => void;
-  saveOrder: (customer: CheckoutCustomer) => Order;
+  saveOrder: (customer: CheckoutCustomer) => Promise<Order>;
   subtotal: number;
   cartCount: number;
   buildWhatsAppUrl: (customer: CheckoutCustomer) => string;
@@ -115,6 +116,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((current) => {
       const next = updater(current);
       writeStoredValue(getCartKey(storageUser), next);
+      void saveFirebaseCart(storageUser, next).catch((caught) => {
+        if (process.env.NODE_ENV === "development") console.log("[ZEIB Firebase] cart save failed", caught);
+      });
       return next;
     });
   }
@@ -123,6 +127,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setWishlist((current) => {
       const next = updater(current);
       writeStoredValue(getWishlistKey(storageUser), next);
+      void saveFirebaseWishlist(storageUser, next).catch((caught) => {
+        if (process.env.NODE_ENV === "development") console.log("[ZEIB Firebase] wishlist save failed", caught);
+      });
       return next;
     });
   }
@@ -198,7 +205,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       clearCompare() {
         updateCompare(() => []);
       },
-      saveOrder(checkoutCustomer) {
+      async saveOrder(checkoutCustomer) {
         const orderCustomer: Customer = {
           id: customer?.id ?? checkoutCustomer.email,
           name: checkoutCustomer.name,
@@ -222,6 +229,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (storageUser?.email === orderUser.email) {
           setOrders(nextOrders);
         }
+        await saveFirebaseOrder(order);
         return order;
       },
       subtotal,

@@ -14,6 +14,8 @@ export default function CheckoutPage() {
   const { customer } = useAuth();
   const { items, subtotal, buildWhatsAppUrl, saveOrder } = useCart();
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: customer?.name ?? "",
     email: customer?.email ?? "",
@@ -79,15 +81,25 @@ export default function CheckoutPage() {
               </div>
               <Button
                 className="mt-5 w-full"
-                disabled={!complete}
-                onClick={() => {
-                  saveOrder(form);
-                  setStatus("Order saved. Opening WhatsApp...");
-                  window.location.href = buildWhatsAppUrl(form);
+                disabled={!complete || submitting}
+                onClick={async () => {
+                  setSubmitting(true);
+                  setError("");
+                  setStatus("");
+                  try {
+                    await saveOrder(form);
+                    setStatus("Order saved. Opening WhatsApp...");
+                    window.location.href = buildWhatsAppUrl(form);
+                  } catch (caught) {
+                    setError(caught instanceof Error ? caught.message : "Could not save order.");
+                  } finally {
+                    setSubmitting(false);
+                  }
                 }}
               >
-                <MessageCircle className="h-4 w-4" /> Order on WhatsApp
+                <MessageCircle className="h-4 w-4" /> {submitting ? "Saving..." : "Order on WhatsApp"}
               </Button>
+              {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
               {status ? <p className="mt-3 text-sm text-green-300">{status}</p> : null}
               {!customer ? (
                 <LinkButton href="/login" variant="secondary" className="mt-3 w-full">

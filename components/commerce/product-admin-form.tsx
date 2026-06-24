@@ -53,7 +53,7 @@ export function ProductAdminForm({ product }: { product?: Product }) {
           <span className="text-sm font-medium">Product image</span>
           <input type="file" accept="image/*" className="focus-ring mt-2 block w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm" />
           <span className="mt-2 block text-xs text-white/45">
-            TODO: Upload to Supabase Storage or Cloudinary and save URL in product_images.
+            TODO: Upload to Firebase Storage or Cloudinary and save URL in product_images.
           </span>
         </label>
         <label className="sm:col-span-2">
@@ -62,7 +62,7 @@ export function ProductAdminForm({ product }: { product?: Product }) {
         </label>
       </div>
       <Button className="mt-5">{product ? "Save product" : "Add product"}</Button>
-      {saved ? <p className="mt-3 text-sm text-green-300">Demo product saved locally. Connect Supabase to persist changes.</p> : null}
+      {saved ? <p className="mt-3 text-sm text-green-300">Demo product saved locally. Connect Firestore to persist changes.</p> : null}
     </form>
   );
 }

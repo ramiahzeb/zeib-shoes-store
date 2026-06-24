@@ -44,7 +44,7 @@ function LoginForm({
   initialPassword: string;
 }) {
   const router = useRouter();
-  const { login } = useAuth();
+  const { authMode, login } = useAuth();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -106,8 +106,14 @@ function LoginForm({
             <Link href="/forgot-password" className="hover:text-white">Forgot password?</Link>
           </div>
           <div className="mt-4 space-y-1 text-xs text-white/45">
-            <p>Admin demo: admin@zeibshoes.my.id with any non-empty password.</p>
-            <p>User demo: user@zeibshoes.my.id / 123456</p>
+            {authMode === "demo" ? (
+              <>
+                <p>Admin demo: admin@zeibshoes.my.id with any non-empty password.</p>
+                <p>User demo: user@zeibshoes.my.id / 123456</p>
+              </>
+            ) : (
+              <p>Firebase authentication is enabled. Use a Firebase account for login.</p>
+            )}
           </div>
         </form>
       </Container>

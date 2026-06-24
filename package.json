@@ -11,9 +11,8 @@
     "qa:browser": "node scripts/browser-qa.mjs"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.87.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.15.0",
     "lucide-react": "^0.562.0",
     "next": "16.2.9",
     "react": "19.2.7",

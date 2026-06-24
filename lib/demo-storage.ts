@@ -22,7 +22,7 @@ export function getCurrentUser(): Customer | null {
 }
 
 export function getUserNamespace(user: Customer | null = getCurrentUser()) {
-  return normalizeStorageId(user?.email);
+  return normalizeStorageId(user?.id || user?.email);
 }
 
 export function getCartKey(user: Customer | null = getCurrentUser()) {

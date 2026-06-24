@@ -10,6 +10,7 @@ import type { Customer } from "@/lib/types";
 export default function AccountPage() {
   const router = useRouter();
   const { customer, loading, logout } = useAuth();
+  const [logoutError, setLogoutError] = useState("");
 
   useEffect(() => {
     if (!loading && !customer) router.push("/login");
@@ -25,8 +26,21 @@ export default function AccountPage() {
             <h1 className="font-serif text-4xl font-bold">My Account</h1>
             <p className="mt-2 text-white/65">Welcome to ZEIB SHOES Store, {customer.name}!</p>
           </div>
-          <Button variant="secondary" onClick={logout}>Logout</Button>
+          <Button
+            variant="secondary"
+            onClick={async () => {
+              setLogoutError("");
+              try {
+                await logout();
+              } catch (caught) {
+                setLogoutError(caught instanceof Error ? caught.message : "Could not logout.");
+              }
+            }}
+          >
+            Logout
+          </Button>
         </div>
+        {logoutError ? <p className="mt-3 text-sm text-red-300">{logoutError}</p> : null}
 
         <div className="mt-8 grid gap-5 sm:grid-cols-3">
           <LinkButton href="/orders" variant="secondary">Orders</LinkButton>
@@ -41,8 +55,10 @@ export default function AccountPage() {
 }
 
 function AccountDetailsForm({ customer }: { customer: Customer }) {
-  const { updateCustomer } = useAuth();
+  const { authMode, updateCustomer } = useAuth();
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     name: customer.name,
     email: customer.email,
@@ -53,10 +69,19 @@ function AccountDetailsForm({ customer }: { customer: Customer }) {
   return (
     <form
       className="mt-8 rounded-md border border-white/10 bg-white/[0.04] p-5"
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
-        updateCustomer({ ...customer, ...form });
-        setSaved(true);
+        setSaving(true);
+        setSaved(false);
+        setError("");
+        try {
+          await updateCustomer({ ...customer, ...form });
+          setSaved(true);
+        } catch (caught) {
+          setError(caught instanceof Error ? caught.message : "Could not save customer details.");
+        } finally {
+          setSaving(false);
+        }
       }}
     >
       <h2 className="text-xl font-semibold">Customer details</h2>
@@ -78,8 +103,13 @@ function AccountDetailsForm({ customer }: { customer: Customer }) {
           </label>
         ))}
       </div>
-      <Button className="mt-5">Save details</Button>
-      {saved ? <p className="mt-3 text-sm text-green-300">Customer details saved locally.</p> : null}
+      <Button className="mt-5" disabled={saving}>{saving ? "Saving..." : "Save details"}</Button>
+      {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+      {saved ? (
+        <p className="mt-3 text-sm text-green-300">
+          Customer details saved {authMode === "firebase" ? "to your account." : "locally."}
+        </p>
+      ) : null}
     </form>
   );
 }

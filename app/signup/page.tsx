@@ -12,6 +12,7 @@ export default function SignupPage() {
   const { signup } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   return (
     <Section>
@@ -23,15 +24,19 @@ export default function SignupPage() {
             event.preventDefault();
             setLoading(true);
             setError("");
+            setSuccess("");
             const form = new FormData(event.currentTarget);
             try {
-              await signup({
+              const result = await signup({
                 name: String(form.get("name")),
                 email: String(form.get("email")),
                 phone: String(form.get("phone")),
                 password: String(form.get("password"))
               });
-              router.push("/account");
+              setSuccess(result.message);
+              if (result.customer && !result.needsEmailConfirmation) {
+                window.setTimeout(() => router.push("/account"), 150);
+              }
             } catch (caught) {
               setError(caught instanceof Error ? caught.message : "Could not create account.");
             } finally {
@@ -52,6 +57,7 @@ export default function SignupPage() {
             </label>
           ))}
           {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+          {success ? <p className="mt-3 text-sm text-green-300">{success}</p> : null}
           <Button type="submit" className="mt-5 w-full" disabled={loading}>
             {loading ? "Creating..." : "Sign up"}
           </Button>

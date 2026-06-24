@@ -28,7 +28,7 @@ function ResetPasswordShell() {
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
-  const { resetPassword } = useAuth();
+  const { authMode, resetPassword } = useAuth();
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState(() => searchParams.get("email") ?? "");
@@ -59,7 +59,7 @@ function ResetPasswordForm() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="focus-ring mt-2 h-11 w-full rounded-md border border-white/10 bg-black/50 px-3"
-              required
+              required={authMode === "demo"}
             />
           </label>
           <label>
@@ -77,7 +77,7 @@ function ResetPasswordForm() {
           {error ? <p className="mt-4 text-sm text-red-300">{error}</p> : null}
           {done ? (
             <p className="mt-4 text-sm text-green-300">
-              Password reset saved in demo mode. <Link href={`/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`} className="font-semibold underline">Login now</Link>.
+              Password reset saved. <Link href={`/login${email ? `?email=${encodeURIComponent(email)}` : ""}`} className="font-semibold underline">Login now</Link>.
             </p>
           ) : null}
         </form>

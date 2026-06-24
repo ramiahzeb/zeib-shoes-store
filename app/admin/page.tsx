@@ -51,7 +51,7 @@ export default function AdminDashboardPage() {
                       </span>
                     </div>
                     <p className="mt-2 text-sm text-white/60">{review.comment}</p>
-                    <p className="mt-2 text-xs text-white/40">TODO: Add approve/delete server actions with Supabase RLS.</p>
+                    <p className="mt-2 text-xs text-white/40">TODO: Add approve/delete server actions with Firebase security rules.</p>
                   </div>
                 ))}
               </div>
@@ -61,7 +61,7 @@ export default function AdminDashboardPage() {
               <div className="mt-4 rounded-md border border-white/10 p-3">
                 <p className="font-medium">Demo Customer</p>
                 <p className="text-sm text-white/60">customer@example.com | +92 300 1234567</p>
-                <p className="mt-2 text-xs text-white/40">TODO: Load customers from Supabase users/customers table.</p>
+                <p className="mt-2 text-xs text-white/40">TODO: Load customers from Firestore customers collection.</p>
               </div>
             </div>
           </div>

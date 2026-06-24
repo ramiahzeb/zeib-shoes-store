@@ -59,7 +59,7 @@ export default function HomePage() {
       <Section className="bg-zeib-ink">
         <Container className="grid gap-8 lg:grid-cols-3">
           {[
-            "Supabase-ready auth, database, reviews, wishlist, and orders.",
+            "Firebase-ready auth, database, reviews, wishlist, and orders.",
             "WhatsApp checkout sends complete cart and customer details.",
             "Vercel-ready architecture with server-only email API route."
           ].map((item) => (

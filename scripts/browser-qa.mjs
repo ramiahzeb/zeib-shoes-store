@@ -9,10 +9,11 @@ function assert(condition, message) {
 }
 
 const normalizeEmail = (email) => email.trim().toLowerCase();
-const cartKey = (email = "guest") => `cart:${normalizeEmail(email)}`;
-const wishlistKey = (email = "guest") => `wishlist:${normalizeEmail(email)}`;
-const ordersKey = (email = "guest") => `orders:${normalizeEmail(email)}`;
-const compareKey = (email = "guest") => `compare:${normalizeEmail(email)}`;
+const storageKey = (value = "guest") => (value === "guest" ? "guest" : normalizeEmail(value));
+const cartKey = (namespace = "guest") => `cart:${storageKey(namespace)}`;
+const wishlistKey = (namespace = "guest") => `wishlist:${storageKey(namespace)}`;
+const ordersKey = (namespace = "guest") => `orders:${storageKey(namespace)}`;
+const compareKey = (namespace = "guest") => `compare:${storageKey(namespace)}`;
 
 async function runQa() {
   const browser = await puppeteer.launch({
@@ -274,7 +275,7 @@ async function runQa() {
           })
         );
         localStorage.setItem(
-          "cart:qa@example.com",
+          "cart:qa-customer",
           JSON.stringify([{ productId: "prd-001", quantity: 2, size: "42", color: "Black" }])
         );
       });
@@ -295,7 +296,7 @@ async function runQa() {
         return button && !button.disabled;
       });
       const decoded = await page.evaluate(() => {
-        const cart = JSON.parse(localStorage.getItem("cart:qa@example.com") || "[]");
+        const cart = JSON.parse(localStorage.getItem("cart:qa-customer") || "[]");
         const customer = {
           name: document.querySelectorAll("input")[0]?.value,
           email: document.querySelectorAll("input")[1]?.value,
@@ -335,12 +336,13 @@ async function runQa() {
       await fill("input[name='password']", "userone123");
       await clickByText("Sign up");
       await page.waitForFunction(() => location.pathname === "/account");
+      const user1Namespace = await page.evaluate(() => JSON.parse(localStorage.getItem("zeib_customer") || "{}").id);
 
       await goto("/products/zeib-crown-leather-shoes");
       await clickByText("Add to cart");
       await clickByText("Wishlist");
-      await page.waitForFunction((key) => JSON.parse(localStorage.getItem(key) || "[]").length === 1, {}, cartKey(user1));
-      await page.waitForFunction((key) => JSON.parse(localStorage.getItem(key) || "[]").length === 1, {}, wishlistKey(user1));
+      await page.waitForFunction((key) => JSON.parse(localStorage.getItem(key) || "[]").length === 1, {}, cartKey(user1Namespace));
+      await page.waitForFunction((key) => JSON.parse(localStorage.getItem(key) || "[]").length === 1, {}, wishlistKey(user1Namespace));
 
       await goto("/checkout");
       await page.evaluate(() => {
@@ -364,7 +366,7 @@ async function runQa() {
         );
         button?.click();
         return JSON.parse(localStorage.getItem(key) || "[]").length;
-      }, ordersKey(user1));
+      }, ordersKey(user1Namespace));
       assert(savedOrderCount === 1, "User1 order was not saved under user namespace");
 
       await goto("/account");
@@ -378,13 +380,14 @@ async function runQa() {
       await fill("input[name='password']", "usertwo123");
       await clickByText("Sign up");
       await page.waitForFunction(() => location.pathname === "/account");
+      const user2Namespace = await page.evaluate(() => JSON.parse(localStorage.getItem("zeib_customer") || "{}").id);
       const user2Initial = await page.evaluate(
         ({ cart, wishlist, orders }) => ({
           cart: JSON.parse(localStorage.getItem(cart) || "[]").length,
           wishlist: JSON.parse(localStorage.getItem(wishlist) || "[]").length,
           orders: JSON.parse(localStorage.getItem(orders) || "[]").length
         }),
-        { cart: cartKey(user2), wishlist: wishlistKey(user2), orders: ordersKey(user2) }
+        { cart: cartKey(user2Namespace), wishlist: wishlistKey(user2Namespace), orders: ordersKey(user2Namespace) }
       );
       assert(user2Initial.cart === 0, "User2 inherited User1 cart");
       assert(user2Initial.wishlist === 0, "User2 inherited User1 wishlist");
@@ -392,7 +395,7 @@ async function runQa() {
 
       await goto("/products/zeib-urban-slides");
       await clickByText("Add to cart");
-      await page.waitForFunction((key) => JSON.parse(localStorage.getItem(key) || "[]").length === 1, {}, cartKey(user2));
+      await page.waitForFunction((key) => JSON.parse(localStorage.getItem(key) || "[]").length === 1, {}, cartKey(user2Namespace));
 
       await goto("/account");
       await clickByText("Logout");
@@ -401,13 +404,14 @@ async function runQa() {
       await goto(`/login?email=${encodeURIComponent(user1)}&password=userone123`);
       await clickByText("Login");
       await page.waitForFunction(() => location.pathname === "/account");
+      const user1ReloginNamespace = await page.evaluate(() => JSON.parse(localStorage.getItem("zeib_customer") || "{}").id);
       const user1Data = await page.evaluate(
         ({ cart, wishlist, orders }) => ({
           cart: JSON.parse(localStorage.getItem(cart) || "[]").length,
           wishlist: JSON.parse(localStorage.getItem(wishlist) || "[]").length,
           orders: JSON.parse(localStorage.getItem(orders) || "[]").length
         }),
-        { cart: cartKey(user1), wishlist: wishlistKey(user1), orders: ordersKey(user1) }
+        { cart: cartKey(user1ReloginNamespace), wishlist: wishlistKey(user1ReloginNamespace), orders: ordersKey(user1ReloginNamespace) }
       );
       assert(user1Data.cart === 1, "User1 cart was not preserved");
       assert(user1Data.wishlist === 1, "User1 wishlist was not preserved");

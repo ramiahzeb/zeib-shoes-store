@@ -1,13 +1,13 @@
 # ZEIB SHOES
 
-Production-ready Next.js e-commerce app for **ZEIB SHOES** with local demo data first, Supabase-ready architecture, WhatsApp checkout, and Vercel deployment support.
+Production-ready Next.js e-commerce app for **ZEIB SHOES** with local demo data first, Firebase-ready architecture, WhatsApp checkout, and Vercel deployment support.
 
 ## Stack
 
 - Next.js 16.2.9 App Router
 - React 19.2.7
 - Tailwind CSS 4
-- Supabase-ready auth, database, storage, reviews, wishlist, cart, and orders
+- Firebase Authentication and Firestore-ready customers, products, reviews, wishlist, cart, and orders
 - Resend/SendGrid-ready server email route
 - Vercel-ready environment configuration
 
@@ -33,24 +33,29 @@ Copy `.env.example` to `.env.local` and fill values when ready.
 
 Important TODOs:
 
-- Add `NEXT_PUBLIC_SUPABASE_URL`
-- Add `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- Add server-only `SUPABASE_SERVICE_ROLE_KEY`
+- Add Firebase web app variables: `NEXT_PUBLIC_FIREBASE_API_KEY`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NEXT_PUBLIC_FIREBASE_PROJECT_ID`, `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`, `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`, and `NEXT_PUBLIC_FIREBASE_APP_ID`
+- Add `NEXT_PUBLIC_ADMIN_EMAILS`
 - Add `RESEND_API_KEY` or `SENDGRID_API_KEY`
 - Add `NEXT_PUBLIC_WHATSAPP_NUMBER`
 
-Secrets must stay in server env vars only. Do not expose service role or email API keys in frontend code.
+Secrets must stay in server env vars only. Do not expose email API keys in frontend code.
 
-## Supabase
+## Firebase
 
-1. Create a Supabase project.
-2. Run `sql/supabase-schema.sql` in the Supabase SQL Editor.
-3. Enable email/password auth.
-4. Create a `product-images` storage bucket or configure Cloudinary.
-5. Add admin users to `public.admin_users`.
-6. Replace demo localStorage flows in `components/providers` with Supabase calls.
+1. Create a Firebase project.
+2. Add a Web App and copy its config values into `.env.local`.
+3. Enable Authentication with the Email/Password provider.
+4. Create Firestore Database.
+5. Use these collections: `customers`, `products`, `reviews`, `wishlist`, `carts`, and `orders`.
+6. Orders store `order_items` as a nested array for now.
+7. Add admin emails to `NEXT_PUBLIC_ADMIN_EMAILS`.
+8. Keep product images local in `public/images` until Firebase Storage or Cloudinary is connected.
 
-The app currently runs without keys using local demo products, auth, cart, wishlist, orders, and reviews.
+See `docs/firebase-firestore-structure.md` for the prepared collection shape.
+
+The app currently runs without Firebase keys using local demo products, auth, cart, wishlist, orders, and reviews.
+
+Visit `http://localhost:3000/debug-firebase` to verify Firebase public config is loaded in the browser.
 
 ## Email
 
@@ -96,4 +101,4 @@ npm run dev
 - GitHub push has not been configured or performed.
 - Product imagery is local in `public/images`.
 - Sensitive work is prepared for server actions/API routes.
-- Demo mode is intentionally local-first so the storefront works before Supabase keys are added.
+- Demo mode is intentionally local-first so the storefront works before Firebase keys are added.

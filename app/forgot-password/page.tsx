@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
 
 export default function ForgotPasswordPage() {
-  const { requestPasswordReset } = useAuth();
+  const { authMode, requestPasswordReset } = useAuth();
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
@@ -44,7 +44,13 @@ export default function ForgotPasswordPage() {
           {error ? <p className="mt-4 text-sm text-red-300">{error}</p> : null}
           {sent ? (
             <p className="mt-4 text-sm text-green-300">
-              Demo reset started. <Link href={`/reset-password?email=${encodeURIComponent(email)}`} className="font-semibold underline">Set a new password</Link>.
+              {authMode === "firebase" ? (
+                "If an account exists with this email, a reset link has been sent."
+              ) : (
+                <>
+                  Demo reset started. <Link href={`/reset-password?email=${encodeURIComponent(email)}`} className="font-semibold underline">Set a new password</Link>.
+                </>
+              )}
             </p>
           ) : null}
         </form>

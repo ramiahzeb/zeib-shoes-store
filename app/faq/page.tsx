@@ -10,7 +10,7 @@ const faqs = [
   ["Do you offer Cash on Delivery?", "Yes, Cash on Delivery is available for orders across Pakistan."],
   ["How do I confirm my order?", "Checkout opens WhatsApp with your complete order summary so our team can confirm availability and delivery."],
   ["Can I exchange size?", "Yes, easy exchange is available for eligible unworn products with original packaging."],
-  ["When will Supabase be connected?", "The architecture is ready. Add Supabase keys, run the SQL schema, and replace demo calls with live queries."]
+  ["When will Firebase be connected?", "Add Firebase web app keys, enable email/password auth, and publish Firestore security rules for live data."]
 ];
 
 export default function FAQPage() {
