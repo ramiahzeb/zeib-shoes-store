@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Container, Section } from "@/components/ui/section";
+import { publicPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "FAQ",
-  description: "Frequently asked questions about ZEIB SHOES orders, delivery, exchange, and sizing."
-};
+export const metadata: Metadata = publicPageMetadata({
+  title: "FAQ: Delivery, COD & Shoe Sizes",
+  description: "Answers about ZEIB SHOES Cash on Delivery, footwear sizes, exchanges, and delivery across Pakistan.",
+  path: "/faq",
+  keywords: ["cash on delivery slippers Pakistan", "ZEIB SHOES slippers"]
+});
 
 const faqs = [
   ["Do you offer Cash on Delivery?", "Yes, Cash on Delivery is available for orders across Pakistan."],

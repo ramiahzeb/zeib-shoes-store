@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Container, Section } from "@/components/ui/section";
+import { publicPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Size Guide",
-  description: "ZEIB SHOES size guide for slippers, slides, sandals, and shoes."
-};
+export const metadata: Metadata = publicPageMetadata({
+  title: "Slipper & Shoe Size Guide Pakistan",
+  description: "Find your ZEIB SHOES slipper, slide, sandal, or shoe size with our Pakistan size guide and fitting advice.",
+  path: "/size-guide",
+  keywords: ["men slippers Pakistan", "comfortable slippers in Pakistan"]
+});
 
 const rows = [
   ["PK/EU 38", "24.0 cm"],

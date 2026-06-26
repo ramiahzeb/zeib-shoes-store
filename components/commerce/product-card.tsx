@@ -23,7 +23,7 @@ export function ProductCard({ product }: { product: Product }) {
       <Link href={`/products/${product.slug}`} className="relative block aspect-[4/3] overflow-hidden bg-white/5">
         <img
           src={product.images[0]}
-          alt={product.name}
+          alt={`${product.name} ${product.category} in Pakistan`}
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />

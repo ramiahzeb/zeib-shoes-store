@@ -81,7 +81,7 @@ Add Resend or SendGrid provider code in `lib/email/welcome.ts` after API keys ar
 
 1. Import this local project into Vercel when you are ready.
 2. Add all variables from `.env.example`.
-3. Set production domain to `zeibshoes.my.id`.
+3. Set production domain to `www.zeibshoes.my.id` and redirect `zeibshoes.my.id` to it.
 4. Add future domain `zeibshoes.com` when available.
 5. Run the production build:
 

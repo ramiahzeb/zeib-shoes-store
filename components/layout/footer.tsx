@@ -17,7 +17,7 @@ export function Footer() {
         <div>
           <p className="font-serif text-2xl font-bold">ZEIB SHOES</p>
           <p className="mt-3 max-w-md text-sm leading-6 text-white/65">
-            Premium footwear for confident everyday movement. Current domain zeibshoes.my.id, future home zeibshoes.com.
+            Premium footwear for confident everyday movement. Visit zeibshoes.my.id today, with zeibshoes.com planned for the future.
           </p>
           <div className="mt-5 flex gap-3 text-zeib-soft-gold">
             <Instagram className="h-5 w-5" />

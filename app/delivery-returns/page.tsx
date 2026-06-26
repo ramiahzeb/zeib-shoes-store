@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Container, Section } from "@/components/ui/section";
+import { publicPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Delivery & Returns",
-  description: "ZEIB SHOES delivery, exchange, and return policy."
-};
+export const metadata: Metadata = publicPageMetadata({
+  title: "Delivery & Easy Exchange Policy",
+  description: "Learn about ZEIB SHOES delivery across Pakistan, Cash on Delivery confirmation, exchanges, and return eligibility.",
+  path: "/delivery-returns",
+  keywords: ["cash on delivery slippers Pakistan", "online shoes Pakistan"]
+});
 
 export default function DeliveryReturnsPage() {
   return (

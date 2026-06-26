@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { StorefrontProducts } from "@/components/commerce/storefront-products";
 import { Container, Section } from "@/components/ui/section";
+import { publicPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Shop Footwear",
-  description: "Browse ZEIB SHOES slippers, slides, sandals, and shoes."
-};
+export const metadata: Metadata = publicPageMetadata({
+  title: "Shop Shoes & Slippers in Pakistan",
+  description: "Shop comfortable slippers, anti-slip bathroom slippers, slides, sandals, and shoes online in Pakistan from ZEIB SHOES.",
+  path: "/products",
+  keywords: ["men slippers Pakistan", "comfortable slippers in Pakistan", "online shoes Pakistan"]
+});
 
 export default function ProductsPage() {
   return (

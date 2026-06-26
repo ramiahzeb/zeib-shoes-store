@@ -29,12 +29,12 @@ export function ProductDetail({ product, reviews }: { product: Product; reviews:
     <div className="grid gap-10 lg:grid-cols-2">
       <div>
         <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-white/5">
-          <img src={product.images[0]} alt={product.name} className="absolute inset-0 h-full w-full object-cover" />
+          <img src={product.images[0]} alt={`${product.name} ${product.category} in Pakistan`} className="absolute inset-0 h-full w-full object-cover" />
         </div>
         <div className="mt-3 grid grid-cols-4 gap-3">
           {product.images.map((image) => (
             <div key={image} className="relative aspect-square overflow-hidden rounded-md border border-white/10 bg-white/5">
-              <img src={image} alt={`${product.name} gallery`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+              <img src={image} alt={`${product.name} ${product.category} gallery image`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
             </div>
           ))}
         </div>

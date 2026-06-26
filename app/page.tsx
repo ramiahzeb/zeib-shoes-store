@@ -4,12 +4,28 @@ import { FeaturedProducts } from "@/components/commerce/featured-products";
 import { TrustBadges } from "@/components/commerce/trust-badges";
 import { LinkButton } from "@/components/ui/button";
 import { Container, Section } from "@/components/ui/section";
+import { absoluteUrl, jsonLd } from "@/lib/seo";
 
 export default function HomePage() {
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "ZEIB SHOES",
+    url: absoluteUrl(),
+    logo: absoluteUrl("/images/zeib-hero.png"),
+    slogan: "Walk With Confidence",
+    description: "ZEIB SHOES offers comfortable slippers, slides, sandals, and shoes in Pakistan.",
+    areaServed: {
+      "@type": "Country",
+      name: "Pakistan"
+    }
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }} />
       <section className="relative min-h-[78vh] overflow-hidden">
-        <Image src="/images/zeib-hero.png" alt="ZEIB SHOES premium footwear collection" fill priority className="object-cover" />
+        <Image src="/images/zeib-hero.png" alt="ZEIB SHOES comfortable slippers and shoes collection in Pakistan" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/10" />
         <div className="relative mx-auto flex min-h-[78vh] max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-zeib-soft-gold">Walk With Confidence</p>
